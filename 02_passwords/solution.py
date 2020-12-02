@@ -5,15 +5,15 @@ def count_letters(input, letter):
             count += 1
     return count
 
-def validate_password_part_1(minimum, maximum, letter, password):
+def validate_password_part_1(loc_1, loc_2, letter, password):
     count = count_letters(password, letter)
-    if minimum <= count <= maximum:
+    if loc_1 <= count <= loc_2:
         return True
     return False
 
-def validate_password_part_2(minimum, maximum, letter, password):
-    loc_1_matches = letter == password[minimum - 1]
-    loc_2_matches = letter == password[maximum - 1]
+def validate_password_part_2(loc_1, loc_2, letter, password):
+    loc_1_matches = (letter == password[loc_1 - 1])
+    loc_2_matches = (letter == password[loc_2 - 1])
     if loc_1_matches and loc_2_matches:
         return False
     elif not loc_1_matches and not loc_2_matches:
@@ -27,13 +27,13 @@ def parse_input(filename):
     for line in lines:
         parts = line.split(' ')
         minmax = parts[0].split('-')
-        minimum = int(minmax[0])
-        maximum = int(minmax[1])
+        loc_1 = int(minmax[0])
+        loc_2 = int(minmax[1])
         letter = parts[1][:-1]
         password = parts[2]
         passwords.append({
-            'minimum': minimum,
-            'maximum': maximum,
+            'loc_1': loc_1,
+            'loc_2': loc_2,
             'letter': letter,
             'password': password
         })
