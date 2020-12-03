@@ -1,9 +1,9 @@
 #!/bin/sh
-# To use run with year then day inputs
-# Ex. ./setup.sh 2020 5
+# To use run with the day and description
+# Ex. ./setup.sh 6 snowballs
 set -a
 source .env
 set +a
-mkdir "day_${2}"
-curl https://adventofcode.com/${1}/day/${2}/input -H "cookie:${SESSION}" > day_${2}/input.txt
+mkdir "0${1}_${2}"
+curl https://adventofcode.com/2020/day/${1}/input -H "cookie:${SESSION}" > 0${1}_${2}/input.txt
 echo "Ready to code!"
