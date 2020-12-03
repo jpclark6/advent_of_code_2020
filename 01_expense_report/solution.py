@@ -1,3 +1,8 @@
+"""
+Advent of code
+Day 1
+"""
+
 from itertools import combinations
 from math import prod # must have python 3.8 installed
 

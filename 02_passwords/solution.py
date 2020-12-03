@@ -1,3 +1,8 @@
+"""
+Advent of code
+Day 2
+"""
+
 def count_letters(input, letter):
     count = 0
     for possible_letter in list(input):
