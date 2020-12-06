@@ -1,7 +1,12 @@
+"""
+Advent of code
+Day 4
+Code quality: Bad. Needs massive refactor. But it works
+"""
+
 import re
 
 filename = './input.txt'
-# filename = './example.txt'
 text = open(filename)
 lines = text.read().split('\n\n')
 lines = [line.replace('\n', ' ') for line in lines]
@@ -70,14 +75,17 @@ for passport in passports:
                 if not 2020 <= int(value) <= 2030:
                     valid = False
             if attribute == 'hgt':
-                height = int(value[:-2])
-                if value[-2:] == 'cm':
-                    if not 150 <= height <= 193:
+                try:
+                    height = int(value[:-2])
+                    if value[-2:] == 'cm':
+                        if not 150 <= height <= 193:
+                            valid = False
+                    elif value[-2:] == 'in':
+                        if not 59 <= height <= 76:
+                            valid = False
+                    else:
                         valid = False
-                elif value[-2:] == 'in':
-                    if not 59 <= height <= 76:
-                        valid = False
-                else:
+                except ValueError:
                     valid = False
             if attribute == 'hcl':
                 if value[0] != '#' and len(value) != 7:
@@ -93,7 +101,7 @@ for passport in passports:
                     valid = False
                 if not re.search("[0-9]{9}", value):
                     valid = False
-        except:
+        except IndexError:
             pass
     
     if valid:
