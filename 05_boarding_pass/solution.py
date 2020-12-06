@@ -1,3 +1,8 @@
+"""
+Advent of code
+Day 5
+"""
+
 def parse_row(boarding_pass):
     possible_seats = list(range(128))
     for rule in boarding_pass[:7]:
