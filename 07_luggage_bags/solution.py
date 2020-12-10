@@ -1,51 +1,24 @@
-COUNT = 0
+"""
+Advent of code
+Day 7
+Harder - code isn't great but used recursion effectively
+"""
 
-def parse_data(filename):
-    text = open(filename)
-    bags = text.read().split('\n')
-    bag_data = {}
-    for bag in bags:
-        color = bag.split(' bags contain ')[0]
-        inside_bags_temp = bag.split(' bags contain ')[1]
-        inside_bags_temp = inside_bags_temp.split(', ')
-        inside_bags = []
-        for inside_bag in inside_bags_temp:
-            if 'no other bags' in inside_bag:
-                continue
-            inside_bag = inside_bag.split(' bag')[0]
-            inside_qty = int(inside_bag.split(' ')[0])
-            inside_color = inside_bag.split(str(inside_qty) + ' ')[1]
-            inside_bag = {'color': inside_color, 'qty': inside_qty}
-            inside_bags.append(inside_bag)
-        if inside_bags:
-            contains_inside_bags = True
-        else:
-            contains_inside_bags = False
-        bag_data[color] = inside_bags
-    return bag_data
 
 class Bag:
     def __init__(self, color, qty=None):
         self.color = color
         self.qty = qty
         self.children = []
-        self.has_gold = False
 
     def __repr__(self):
         return f'< Bag - {self.qty} {self.color} - {len(self.children)}c>'
 
     def add_children(self, bag_data):
         for child in bag_data[self.color]:
-            if child['color'] == 'shiny gold':
-                global COUNT 
-                COUNT += 1
-            self.add_child(child['color'], child['qty'])
-        else:
-            pass
+            self.add_child(child['color'], child['qty'], bag_data)
 
-    def add_child(self, color, qty):
-        if color == 'shiny gold':
-            self.contains_shiny_gold = True
+    def add_child(self, color, qty, bag_data):
         bag = Bag(color, qty)
         self.children.append(bag)
         bag.add_children(bag_data)
@@ -68,7 +41,8 @@ def make_bags(bag_data):
         bags.append(bag)
     return bags
 
-def make_bags_dict(bags):
+def make_bags_dict(bag_data):
+    bags = make_bags(bag_data)
     bag_dict = {}
     for bag in bags:
         bag_dict[bag.color] = bag.children
@@ -79,49 +53,48 @@ def part_1(bags_dict):
     for bag in bags_dict:
         if check_children_for_gold(bag, bags_dict):
             total += 1
-    print("TOTAL", total)
-
+    print("Total part 1:", total)
 
 def part_2(bags_dict):
-    total = find_shiny_bags('shiny gold', bags_dict) - 1
-    print("TOTAL", total)
-
-def find_qty_children(parent_color, bags_dict):
-    return len(bags_dict[parent_color.color])
-
+    total = find_shiny_bags('shiny gold', bags_dict) - 1 # subtract top bag from total
+    print("Total part 2:", total)
 
 def find_shiny_bags(color, bags_dict, qty=1):
     if len(bags_dict[color]) == 0:
-        # print(color, 1, "(no inside bags)")
-        return 1
+        return 1 # single bag without any bags inside
     else:
-        total = 1
+        total = 1 # count current bag plus children
         for child in bags_dict[color]:
             total += child.qty * find_shiny_bags(child.color, bags_dict, child.qty)
-            # print(color, child.qty * find_shiny_bags(child.color, bags_dict), total)
         return total
     
-
-def replace_inside_bags(bag_color, bags):
-    if not bags[bag_color]:
-        return
-    new_inside_bags = []
-    for inside_bag in bags[bag_color]:
-        color = inside_bag['color']
-        if bags[color]:
-            bags[color] = replace_inside_bags(color, bags)
-        x = 1
-        
-            
-
+def parse_data(filename):
+    text = open(filename)
+    bags = text.read().split('\n')
+    bag_data = {}
+    for bag in bags:
+        color = bag.split(' bags contain ')[0]
+        inside_bags_temp = bag.split(' bags contain ')[1]
+        inside_bags_temp = inside_bags_temp.split(', ')
+        inside_bags = []
+        for inside_bag in inside_bags_temp:
+            if 'no other bags' in inside_bag:
+                continue
+            inside_bag = inside_bag.split(' bag')[0]
+            inside_qty = int(inside_bag.split(' ')[0])
+            inside_color = inside_bag.split(str(inside_qty) + ' ')[1]
+            inside_bag = {'color': inside_color, 'qty': inside_qty}
+            inside_bags.append(inside_bag)
+        if inside_bags:
+            contains_inside_bags = True
+        else:
+            contains_inside_bags = False
+        bag_data[color] = inside_bags
+    return make_bags_dict(bag_data)
 
 if __name__ == "__main__":
-    filename = './example.txt'
-    filename = './example2.txt'
     filename = './input.txt'
-    bag_data = parse_data(filename)
-    bags = make_bags(bag_data)
-    bags_dict = make_bags_dict(bags)
+    bags_dict = parse_data(filename)
     part_1(bags_dict)
     part_2(bags_dict)
 
