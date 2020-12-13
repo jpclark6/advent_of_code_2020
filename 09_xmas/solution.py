@@ -1,3 +1,9 @@
+"""
+Advent of code
+Day 9
+Brute force but works in a few seconds
+"""
+
 from itertools import combinations 
 
 def parse_input(filename):
@@ -14,7 +20,6 @@ def part_1(data, preamble):
         if data[i] not in combos:
             print("Part 1:", data[i])
             return data[i]
-    print("Not found")
 
 def part_2(data, value):
     for i in range(len(data)):
@@ -27,8 +32,6 @@ def part_2(data, value):
 
 if __name__ == "__main__":
     filename = 'input.txt'
-    # filename = 'example.txt'
     data = parse_input(filename)
-    # value = part_1(data, 5)
     value = part_1(data, 25)
     part_2(data, value)
