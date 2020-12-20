@@ -1,3 +1,10 @@
+"""
+Advent of code
+Day 11
+Not dry, not fast (5 sec part 1, 10 sec part 2) but it works
+Lots of room for refactor
+"""
+
 from copy import deepcopy
 import hashlib
 
