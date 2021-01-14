@@ -4,6 +4,6 @@
 set -a
 source .env
 set +a
-mkdir "0${1}_${2}"
-curl https://adventofcode.com/2020/day/${1}/input -H "cookie:${SESSION}" > 0${1}_${2}/input.txt
+mkdir "${1}_${2}"
+curl https://adventofcode.com/2020/day/${1}/input -H "cookie:${SESSION}" > ${1}_${2}/input.txt
 echo "Ready to code!"
